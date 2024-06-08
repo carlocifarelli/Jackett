@@ -1442,13 +1442,24 @@ namespace Jackett.Common.Indexers
             }
 
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, CookieHeader, true, null, LoginUrl, true);
-            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("id=\"logged-in-username\""), () =>
+
+            if (result.ContentString == null)
+            {
+                throw new ExceptionWithConfigData("ContentString = null", configData);
+            }
+
+            if (result.ContentString.Contains("logged-in-username"))
+            {
+                logger.Debug("contains!");
+            }
+
+            await ConfigureIfOK(result.Cookies, result.ContentString != null && result.ContentString.Contains("logged-in-username"), () =>
             {
                 var parser = new HtmlParser();
                 using var doc = parser.ParseDocument(result.ContentString);
                 var errorMessage = doc.QuerySelector("h4.warnColor1.tCenter.mrg_16, div.msg-main")?.TextContent.Trim();
 
-                throw new ExceptionWithConfigData(errorMessage ?? "RuTracker authentication failed", configData);
+                throw new ExceptionWithConfigData(errorMessage ?? "RuTracker authentication failed fuck", configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
         }

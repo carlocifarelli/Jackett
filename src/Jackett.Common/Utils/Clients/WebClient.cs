@@ -178,7 +178,7 @@ namespace Jackett.Common.Utils.Clients
                     lines ??= new List<string>();
                     postData = $" PostData: {{{string.Join(", ", lines)}}} RawBody: {request.RawBody}";
                 }
-                logger.Debug($"WebClient({ClientType}).GetResultAsync(Method: {request.Type} Url: {request.Url}{postData})");
+                //logger.Debug($"WebClient({ClientType}).GetResultAsync(Method: {request.Type} Url: {request.Url}{postData})");
             }
 
             PrepareRequest(request);
